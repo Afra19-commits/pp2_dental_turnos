@@ -3,7 +3,7 @@ const express = require("express");
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const { createClient } = require("@supabase/supabase-js");
-const path = require("path"); // <-- ESTA LÍNEA FALTABA
+const path = require("path");
 
 const app = express();
 const supabase = createClient(
@@ -13,7 +13,7 @@ const supabase = createClient(
 
 // Configuraciones básicas
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views")); // <-- ESTA LÍNEA FALTABA
+app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(
@@ -57,6 +57,30 @@ app.post("/login", async (req, res) => {
   else res.redirect("/paciente");
 });
 
+// 3.1 Mostrar formulario de Registro
+app.get("/registro", (req, res) => res.render("registro", { error: null }));
+
+// 3.2 Procesar el Registro (Nuevo usuario paciente)
+app.post("/registro", async (req, res) => {
+  const { nombre, email, password } = req.body;
+
+  // Encriptar la contraseña
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  // Insertar en Supabase con rol de paciente
+  const { error } = await supabase
+    .from("usuarios")
+    .insert([{ nombre, email, password: hashedPassword, rol: "paciente" }]);
+
+  if (error) {
+    return res.render("registro", { error: "El email ya está registrado" });
+  }
+
+  // Redirigir al login para que ingrese
+  res.redirect("/login");
+});
+
 // 4. Panel del Paciente (Cliente)
 app.get("/paciente", async (req, res) => {
   if (!req.session.user || req.session.user.rol !== "paciente")
@@ -75,8 +99,27 @@ app.get("/admin", async (req, res) => {
     return res.redirect("/login");
 
   // El admin ve todos los turnos del consultorio
-  const { data: turnos } = await supabase.from("turnos").select("*");
+  const { data: turnos } = await supabase
+    .from("turnos")
+    .select("*")
+    .order("fecha", { ascending: true });
   res.render("admin", { user: req.session.user, turnos: turnos || [] });
+});
+
+// 5.1 Cambiar el estado de un turno (Solo Admin)
+app.post("/cambiar-estado/:id", async (req, res) => {
+  if (!req.session.user || req.session.user.rol !== "admin")
+    return res.redirect("/login");
+
+  const turnoId = req.params.id;
+  const { nuevo_estado } = req.body;
+
+  await supabase
+    .from("turnos")
+    .update({ estado: nuevo_estado })
+    .eq("id", turnoId);
+
+  res.redirect("/admin");
 });
 
 // 6. Reservar Turno (Solo Paciente)

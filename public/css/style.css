@@ -5,19 +5,22 @@ body {
   margin: 0;
   padding: 20px;
 }
+
 .container {
   background: white;
-  max-width: 600px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 h1,
 h2,
 h3 {
   color: #007bff;
 }
+
 input,
 select,
 button {
@@ -27,7 +30,9 @@ button {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-family: inherit;
 }
+
 button {
   background-color: #007bff;
   color: white;
@@ -35,26 +40,65 @@ button {
   cursor: pointer;
   font-weight: bold;
 }
+
 button:hover {
   background-color: #0056b3;
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 15px;
 }
+
 th,
 td {
-  padding: 10px;
+  padding: 8px;
   border: 1px solid #ddd;
   text-align: left;
+  font-size: 14px;
+  vertical-align: middle;
 }
+
 th {
   background-color: #f2f2f2;
 }
+
+/* Ajustes específicos para que la tabla no se desborde */
+td select {
+  width: auto;
+  min-width: 90px;
+}
+
+td button {
+  width: auto;
+  padding: 5px 10px;
+}
+
+/* Colores para los estados (se aplican solos gracias a las clases en el HTML) */
+.estado-pendiente {
+  color: #d97706; /* Naranja */
+  font-weight: bold;
+}
+
+.estado-atendido {
+  color: #16a34a; /* Verde */
+  font-weight: bold;
+}
+
+.estado-ausente {
+  color: #dc2626; /* Rojo */
+  font-weight: bold;
+}
+
 .btn-logout {
   display: inline-block;
   margin-bottom: 20px;
   color: red;
   text-decoration: none;
+  font-weight: bold;
+}
+
+.btn-logout:hover {
+  text-decoration: underline;
 }
