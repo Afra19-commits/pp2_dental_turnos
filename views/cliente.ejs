@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mi Panel - DentalTurnos</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido/a, <%= user.nombre %></h1>
+        <a href="/logout" class="btn-logout">Cerrar Sesión</a>
+        
+        <h3>Reservar un Turno</h3>
+        <form action="/reservar" method="POST">
+            <input type="text" name="paciente_nombre" placeholder="Nombre del paciente" required>
+            <input type="date" name="fecha" required>
+            <input type="time" name="hora" required>
+            <select name="tratamiento" required>
+                <option value="Consulta General">Consulta General</option>
+                <option value="Limpieza">Limpieza</option>
+                <option value="Extracción">Extracción</option>
+                <option value="Ortodoncia">Ortodoncia</option>
+            </select>
+            <button type="submit">Reservar Turno</button>
+        </form>
+
+        <h3>Mis Turnos</h3>
+        <ul>
+            <% if (turnos.length > 0) { %>
+                <% turnos.forEach(t => { %>
+                    <li><%= t.fecha %> a las <%= t.hora %> - <%= t.tratamiento %> (<%= t.estado %>)</li>
+                <% }) %>
+            <% } else { %>
+                <li>No tenés turnos reservados aún.</li>
+            <% } %>
+        </ul>
+    </div>
+</body>
+</html>

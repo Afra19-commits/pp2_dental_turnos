@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel Admin - DentalTurnos</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Panel de Gestión Odontológica</h1>
+        <a href="/logout" class="btn-logout">Cerrar Sesión</a>
+        
+        <h3>Agenda de Turnos</h3>
+        <table>
+            <tr>
+                <th>Fecha</th><th>Hora</th><th>Paciente</th><th>Tratamiento</th><th>Estado</th>
+            </tr>
+            <% if (turnos.length > 0) { %>
+                <% turnos.forEach(t => { %>
+                    <tr>
+                        <td><%= t.fecha %></td>
+                        <td><%= t.hora %></td>
+                        <td><%= t.paciente_nombre %></td>
+                        <td><%= t.tratamiento %></td>
+                        <td><%= t.estado %></td>
+                    </tr>
+                <% }) %>
+            <% } else { %>
+                <tr><td colspan="5">No hay turnos reservados aún.</td></tr>
+            <% } %>
+        </table>
+    </div>
+</body>
+</html>

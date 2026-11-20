@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login - DentalTurnos</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Consultorio Odontológico</h2>
+        <h3>Iniciar Sesión</h3>
+        <% if (typeof error !== 'undefined' && error) { %>
+            <p style="color:red;"><%= error %></p>
+        <% } %>
+        <form action="/login" method="POST">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Entrar</button>
+        </form>
+    </div>
+</body>
+</html>
